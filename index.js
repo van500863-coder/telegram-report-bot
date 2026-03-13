@@ -8,9 +8,6 @@ const { google } = require("googleapis");
 const app = express();
 app.use(express.json());
 
-// =========================
-// CONFIG
-// =========================
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
@@ -23,15 +20,11 @@ const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY
   ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n")
   : "";
 
-const NAME_COL_INDEX = 0; // Column A
-const DATE_COL_INDEX = 7; // Column H
+const NAME_COL_INDEX = 0; // A
+const DATE_COL_INDEX = 7; // H
 
-// ចងចាំថាថ្ងៃណាដែលបាន auto-send រួច
 let lastAutoSentDate = null;
 
-// =========================
-// GOOGLE SHEETS AUTH
-// =========================
 async function getSheetsClient() {
   const auth = new google.auth.JWT({
     email: SERVICE_ACCOUNT_EMAIL,
@@ -47,16 +40,13 @@ async function getSheetsClient() {
   });
 }
 
-// =========================
-// DATE HELPERS
-// =========================
 function getTodayCompare(date = new Date()) {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: TIMEZONE,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).format(date); // YYYY-MM-DD
+  }).format(date);
 }
 
 function getTodayDisplay(date = new Date()) {
@@ -65,7 +55,7 @@ function getTodayDisplay(date = new Date()) {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-  }).format(date); // DD/MM/YYYY
+  }).format(date);
 }
 
 function normalizeSheetDate(value) {
@@ -73,13 +63,11 @@ function normalizeSheetDate(value) {
 
   const str = String(value).trim();
 
-  // ករណី Google Sheet date parse បាន
   const parsed = new Date(str);
   if (!isNaN(parsed.getTime())) {
     return getTodayCompare(parsed);
   }
 
-  // ករណី dd/mm/yyyy ឬ d/m/yyyy
   const parts = str.split(/[\/\-]/);
   if (parts.length === 3) {
     let [d, m, y] = parts;
@@ -92,9 +80,6 @@ function normalizeSheetDate(value) {
   return "";
 }
 
-// =========================
-// READ TODAY DATA
-// =========================
 async function getTodayFacebookData() {
   const sheets = await getSheetsClient();
 
@@ -131,9 +116,6 @@ async function getTodayFacebookData() {
   };
 }
 
-// =========================
-// BUILD MESSAGE
-// =========================
 function buildReportMessage(data) {
   const { total, uniqueNames, todayDisplay } = data;
 
@@ -151,9 +133,6 @@ ${names}
 សូមគោរពអគុណ🙏🙏`;
 }
 
-// =========================
-// TELEGRAM
-// =========================
 async function sendTelegramMessage(chatId, text) {
   const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
@@ -163,16 +142,12 @@ async function sendTelegramMessage(chatId, text) {
   });
 }
 
-// =========================
-// AUTO REPORT 5:00 PM
-// ផ្ញើ 1 ដងប៉ុណ្ណោះក្នុង 1 ថ្ងៃ
-// =========================
 async function sendDailyAutoReport() {
   try {
     const data = await getTodayFacebookData();
 
     if (lastAutoSentDate === data.todayCompare) {
-      console.log("⏩ Auto report already sent today, skip.");
+      console.log("Auto report already sent today.");
       return;
     }
 
@@ -180,58 +155,63 @@ async function sendDailyAutoReport() {
     await sendTelegramMessage(CHAT_ID, message);
 
     lastAutoSentDate = data.todayCompare;
-    console.log("✅ Auto report sent successfully.");
+    console.log("Auto report sent successfully.");
   } catch (error) {
-    console.error("❌ Auto report error:", error.response?.data || error.message);
+    console.error("Auto report error:", error.response?.data || error.message);
   }
 }
 
-// រៀងរាល់ថ្ងៃ ម៉ោង 5:00 PM
 cron.schedule(
   "0 17 * * *",
   async () => {
-    console.log("⏰ Running 5:00 PM auto report...");
+    console.log("Running 5:00 PM auto report...");
     await sendDailyAutoReport();
   },
   { timezone: TIMEZONE }
 );
 
-// =========================
-// MANUAL /Report
-// វាយ 1 ម្តង បង្ហាញ 1 ម្តង
-// =========================
 app.post(`/webhook/${BOT_TOKEN}`, async (req, res) => {
   try {
+    console.log("Incoming update:", JSON.stringify(req.body, null, 2));
+
     const message = req.body?.message;
     if (!message) return res.sendStatus(200);
 
     const chatId = message.chat?.id;
     const text = (message.text || "").trim();
+    const normalizedText = text.toLowerCase().split("@")[0];
 
-    if (text === "/Report") {
+    if (normalizedText === "/report") {
       const data = await getTodayFacebookData();
       const report = buildReportMessage(data);
       await sendTelegramMessage(chatId, report);
+      console.log("Report sent to:", chatId);
     }
 
     return res.sendStatus(200);
   } catch (error) {
-    console.error("❌ Webhook error:", error.response?.data || error.message);
+    console.error("Webhook error:", error.response?.data || error.message);
     return res.sendStatus(200);
   }
 });
 
-// =========================
-// HOME
-// =========================
 app.get("/", (req, res) => {
   res.send("Telegram Report Bot is running...");
 });
 
-// =========================
-// START SERVER
-// =========================
+app.get("/test-report", async (req, res) => {
+  try {
+    const data = await getTodayFacebookData();
+    const report = buildReportMessage(data);
+    await sendTelegramMessage(CHAT_ID, report);
+    res.send("Test report sent.");
+  } catch (error) {
+    console.error("Test report error:", error.response?.data || error.message);
+    res.status(500).send(error.response?.data || error.message);
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`✅ Waiting for 5:00 PM auto report and /Report command...`);
+  console.log(`Server running on port ${PORT}`);
+  console.log("Waiting for 5:00 PM auto report and /Report command...");
 });
