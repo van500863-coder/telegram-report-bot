@@ -1,217 +1,268 @@
-require("dotenv").config();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxy Global - Pro Pricing</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
 
-const express = require("express");
-const axios = require("axios");
-const cron = require("node-cron");
-const { google } = require("googleapis");
+    <div class="bg-glow"></div>
 
-const app = express();
-app.use(express.json());
+    <nav class="navbar">
+        <div class="nav-logo">GALAXY GLOBAL</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#portfolio">Masterpieces</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
-const BOT_TOKEN = process.env.BOT_TOKEN;
-const CHAT_ID = process.env.CHAT_ID;
-const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
-const SHEET_NAME = process.env.SHEET_NAME || "DATA";
-const TIMEZONE = process.env.TIMEZONE || "Asia/Phnom_Penh";
-const PORT = process.env.PORT || 3000;
+    <header class="hero-section">
+        <div class="logo-container">
+            <img src="./photo_2026-04-22_15-43-19.jpg" alt="Galaxy Global Logo" class="site-logo">
+        </div>
+        
+        <h1 class="main-title">GALAXY GLOBAL</h1>
+        <p class="subtitle">THE WORLD'S LARGEST VIDEO PRODUCTION SQUAD</p>
+        <button class="btn primary-btn" onclick="openSampleModal()">GET 1 FREE SAMPLE</button>
+    </header>
 
-const SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY
-  ? process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n")
-  : "";
+    <section id="services" class="services-section">
+        <h2 class="section-title">OUR SERVICES</h2>
+        <p class="subtitle">សេវាកម្មដែលយើងផ្តល់ជូន</p>
+        <div class="services-grid">
+            <div class="service-card tilt-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-clapperboard"></i>
+                </div>
+                <h3>Video Editing</h3>
+                <p>កាត់តវីដេអូប្រកបដោយវិជ្ជាជីវៈសម្រាប់ YouTube, Facebook, និង TikTok។</p>
+            </div>
+            <div class="service-card tilt-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-palette"></i>
+                </div>
+                <h3>Color Grading</h3>
+                <p>កែពណ៌វីដេអូឲ្យស្រស់ស្អាត ទាក់ទាញ និងមានស្តង់ដារភាពយន្តកម្រិតខ្ពស់។</p>
+            </div>
+            <div class="service-card tilt-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <h3>Motion & VFX</h3>
+                <p>បញ្ចូល Effects និង Animations ធ្វើឲ្យវីដេអូកាន់តែរស់រវើក និងទាក់ទាញចំណាប់អារម្មណ៍។</p>
+            </div>
+            <div class="service-card tilt-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-music"></i>
+                </div>
+                <h3>Audio Design</h3>
+                <p>រៀបចំសំឡេង បញ្ចូលភ្លេង និង Sound Effects ឲ្យស៊ីចង្វាក់គ្នាឥតខ្ចោះ។</p>
+            </div>
+        </div>
+    </section>
 
-const NAME_COL_INDEX = 0; // A
-const DATE_COL_INDEX = 7; // H
+    <section id="portfolio" class="masterpieces-section">
+        <h2 class="section-title">OUR MASTERPIECES</h2>
+        <div class="video-grid">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/McLq0PjZHgg" title="YouTube video 1" allowfullscreen></iframe>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/-sdSyj1aFuM" title="YouTube video 2" allowfullscreen></iframe>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/4i4zE9cubqk" title="YouTube video 3" allowfullscreen></iframe>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/otFqTautpug" title="YouTube video 4" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
 
-let lastAutoSentDate = null;
+    <section id="pricing" class="pricing-section">
+        <h2 class="section-title">CHOOSE YOUR PLAN</h2>
+        <div class="pricing-grid">
+            
+            <div class="pricing-card tilt-card">
+                <div class="card-content">
+                    <h3 class="plan-name">BASIC</h3>
+                    <p class="plan-price">$20</p>
+                    <p class="plan-desc">ល្អសម្រាប់វីដេអូខ្លីៗ & TikTok</p>
+                    <ul class="plan-features">
+                        <li><span class="check">✔</span> វីដេអូដើមប្រវែងក្រោម 10 នាទី</li>
+                        <li><span class="check">✔</span> កាត់តមូលដ្ឋាន (Basic Editing)</li>
+                        <li><span class="check">✔</span> តន្ត្រីអត់ជាប់កម្មសិទ្ធិ</li>
+                        <li><span class="check">✔</span> កែតម្រូវបាន 2 ដង</li>
+                    </ul>
+                    <button class="btn plan-btn" onclick="openPaymentModal('BASIC', 20)">ORDER NOW</button>
+                </div>
+            </div>
 
-async function getSheetsClient() {
-  const auth = new google.auth.JWT({
-    email: SERVICE_ACCOUNT_EMAIL,
-    key: PRIVATE_KEY,
-    scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-  });
+            <div class="pricing-card tilt-card popular">
+                <div class="popular-badge">MOST POPULAR</div>
+                <div class="card-content">
+                    <h3 class="plan-name">BUSINESS</h3>
+                    <p class="plan-price">$100</p>
+                    <p class="plan-desc">ល្អសម្រាប់ YouTube & អាជីវកម្ម</p>
+                    <ul class="plan-features">
+                        <li><span class="check">✔</span> វីដេអូដើមប្រវែងក្រោម 45 នាទី</li>
+                        <li><span class="check">✔</span> កាត់តកម្រិតខ្ពស់ & Color Grading</li>
+                        <li><span class="check">✔</span> ដាក់អក្សររត់ពីក្រោម (Subtitles)</li>
+                        <li><span class="check">✔</span> កែតម្រូវមិនកំណត់</li>
+                    </ul>
+                    <button class="btn plan-btn glow-btn" onclick="openPaymentModal('BUSINESS', 100)">ORDER NOW</button>
+                </div>
+            </div>
 
-  await auth.authorize();
+            <div class="pricing-card tilt-card">
+                <div class="card-content">
+                    <h3 class="plan-name">PREMIUM</h3>
+                    <p class="plan-price">$500</p>
+                    <p class="plan-desc">កញ្ចប់ម៉ៅប្រចាំខែ (Unlimited)</p>
+                    <ul class="plan-features">
+                        <li><span class="check">✔</span> ស្នើសុំវីដេអូមិនកំណត់ក្នុង១ខែ</li>
+                        <li><span class="check">✔</span> មានអ្នកកាត់តផ្ទាល់ខ្លួន</li>
+                        <li><span class="check">✔</span> Motion Graphics & VFX</li>
+                        <li><span class="check">✔</span> ទទួលបានឯកសារដើម</li>
+                    </ul>
+                    <button class="btn plan-btn" onclick="openPaymentModal('PREMIUM', 500)">ORDER NOW</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  return google.sheets({
-    version: "v4",
-    auth,
-  });
-}
+    <section class="workflow-section">
+        <h2 class="section-title">How We Work</h2>
+        <p class="subtitle">A simple process that delivers premium results.</p>
+        
+        <div class="workflow-grid">
+            <div class="workflow-card tilt-card">
+                <div class="workflow-img">
+                    <img src="./image/1.png" alt="Step 1: Consultation">
+                </div>
+                <div class="workflow-step">01</div>
+                <h3>Consultation & Onboarding</h3>
+                <p>We will consult with you directly to fully understand the goals, preferences, and creative direction of your desired video.</p>
+            </div>
 
-function getTodayCompare(date = new Date()) {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: TIMEZONE,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
-}
+            <div class="workflow-card tilt-card">
+                <div class="workflow-img">
+                    <img src="./image/2.jpg" alt="Step 2: Production">
+                </div>
+                <div class="workflow-step">02</div>
+                <h3>Creation & Editing</h3>
+                <p>Our expert team will begin organizing, editing, color grading, and adding artistic elements to transform your raw footage into a masterpiece.</p>
+            </div>
 
-function getTodayDisplay(date = new Date()) {
-  return new Intl.DateTimeFormat("en-GB", {
-    timeZone: TIMEZONE,
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }).format(date);
-}
+            <div class="workflow-card tilt-card">
+                <div class="workflow-img">
+                    <img src="./image/4.jpg" alt="Step 3: Delivery">
+                </div>
+                <div class="workflow-step">03</div>
+                <h3>Delivery & Revisions</h3>
+                <p>We will send you the initial draft for review and make adjustments until you are 100% satisfied before delivering the final files.</p>
+            </div>
+        </div>
+    </section>
 
-function normalizeSheetDate(value) {
-  if (!value) return "";
+    <footer id="contact" class="footer-section">
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3 class="footer-logo">GALAXY GLOBAL</h3>
+                <p>The World's Largest Video Production Squad. Contact us for your next project. Let's create masterpieces together!</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p><i class="fa-solid fa-envelope" style="color: var(--gold-main); margin-right: 8px;"></i> Email: contact@galaxyglobal.net</p>
+                <p><i class="fa-solid fa-phone" style="color: var(--gold-main); margin-right: 8px;"></i> Phone: +855 12 345 678</p>
+                <p><i class="fa-solid fa-location-dot" style="color: var(--gold-main); margin-right: 8px;"></i> Location: Phnom Penh, Cambodia</p>
+            </div>
 
-  const str = String(value).trim();
+            <div class="footer-partners">
+                <h4>Our Partners</h4>
+                <div class="partners-logos">
+                    <div class="partner-logo-box">
+                        <img src="./image/Galaxy-Logo KH.png" alt="Galaxy Navatra KH">
+                        <span>Galaxy Navatra KH</span>
+                    </div>
+                    <div class="partner-logo-box">
+                        <img src="./image/Galaxy-Logo.png" alt="Galaxy Navatra">
+                        <span>Galaxy Navatra</span>
+                    </div>
+                </div>
+            </div>
+            </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Galaxy Global. All Rights Reserved.</p>
+        </div>
+    </footer>
 
-  const parsed = new Date(str);
-  if (!isNaN(parsed.getTime())) {
-    return getTodayCompare(parsed);
-  }
+    <div id="payment-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closePaymentModal()">&times;</span>
+            <h2 class="modal-title">Complete Your Order</h2>
+            <p class="modal-subtitle" id="modal-plan-info">Plan: BASIC | Total: $20</p>
 
-  const parts = str.split(/[\/\-]/);
-  if (parts.length === 3) {
-    let [d, m, y] = parts;
-    d = d.padStart(2, "0");
-    m = m.padStart(2, "0");
-    if (y.length === 2) y = "20" + y;
-    if (y.length === 4) return `${y}-${m}-${d}`;
-  }
+            <div class="payment-tabs">
+                <button class="tab-btn active" onclick="switchPaymentMethod('card')">Credit Card</button>
+                <button class="tab-btn" onclick="switchPaymentMethod('qr')">QR KHQR</button>
+            </div>
 
-  return "";
-}
+            <div id="method-card" class="payment-method-box active">
+                <input type="text" class="pay-input" placeholder="Cardholder Name" required>
+                <input type="text" class="pay-input" placeholder="Card Number (0000 0000 0000 0000)" maxlength="19" required>
+                <div class="input-row">
+                    <input type="text" class="pay-input" placeholder="MM/YY" maxlength="5" required>
+                    <input type="text" class="pay-input" placeholder="CVC" maxlength="3" required>
+                </div>
+                <button class="btn plan-btn glow-btn" style="width: 100%; margin-top: 15px;" onclick="processPayment()">PAY NOW</button>
+            </div>
 
-async function getTodayFacebookData() {
-  const sheets = await getSheetsClient();
+            <div id="method-qr" class="payment-method-box">
+                <div class="qr-container">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=GalaxyGlobalPayment&color=dcb34d&bgcolor=1f2029" alt="Scan QR to Pay">
+                </div>
+                <p class="qr-text">សូមស្កេន QR តាមរយៈកម្មវិធីធនាគាររបស់អ្នក (ABA, ACLEDA, ល។)</p>
+                <button class="btn plan-btn" style="width: 100%; margin-top: 10px;" onclick="processPayment()">I HAVE PAID</button>
+            </div>
+        </div>
+    </div>
 
-  const range = `${SHEET_NAME}!A:H`;
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range,
-  });
+    <div id="sample-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeSampleModal()">&times;</span>
+            <h2 class="modal-title">Request Free Sample</h2>
+            <p class="modal-subtitle">សូមបំពេញព័ត៌មានខាងក្រោម</p>
 
-  const rows = res.data.values || [];
-  const todayCompare = getTodayCompare();
-  const todayDisplay = getTodayDisplay();
+            <form id="sample-form" onsubmit="submitSampleForm(event)">
+                <input type="text" class="pay-input" id="sample-name" placeholder="Name" required>
+                <input type="email" class="pay-input" id="sample-email" placeholder="Email" required>
+                <input type="text" class="pay-input" id="sample-project" placeholder="Project (ex: YouTube, TikTok)" required>
+                <input type="text" class="pay-input" id="sample-timeline" placeholder="Timeline (ex: 3 days, 1 week)" required>
+                <textarea class="pay-input" id="sample-message" placeholder="Message / Detail" rows="4" required></textarea>
+                
+                <button type="submit" class="btn plan-btn glow-btn" style="width: 100%; margin-top: 15px;">SUBMIT NOW</button>
+            </form>
+        </div>
+    </div>
 
-  const matchedNames = [];
-
-  for (const row of rows) {
-    const name = (row[NAME_COL_INDEX] || "").toString().trim();
-    const rawDate = row[DATE_COL_INDEX] || "";
-    const rowDate = normalizeSheetDate(rawDate);
-
-    if (!name) continue;
-    if (rowDate === todayCompare) {
-      matchedNames.push(name);
-    }
-  }
-
-  const uniqueNames = [...new Set(matchedNames)];
-
-  return {
-    total: matchedNames.length,
-    uniqueNames,
-    todayDisplay,
-    todayCompare,
-  };
-}
-
-function buildReportMessage(data) {
-  const { total, uniqueNames, todayDisplay } = data;
-
-  const names =
-    uniqueNames.length > 0
-      ? uniqueNames.map((name) => `- ${name}`).join("\n")
-      : "- មិនមានទិន្នន័យ";
-
-  return `គោរពជម្រាបបងសម្រាប់ថ្ងៃទី ${todayDisplay} ជាទិន្នន័យ បង្កើត Facebook
-ចំនួន សរុប ${total} អាខោន
-
-+អ្នកបង្កើតមាន៖
-${names}
-
-សូមគោរពអគុណ🙏🙏`;
-}
-
-async function sendTelegramMessage(chatId, text) {
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-
-  await axios.post(url, {
-    chat_id: chatId,
-    text,
-  });
-}
-
-async function sendDailyAutoReport() {
-  try {
-    const data = await getTodayFacebookData();
-
-    if (lastAutoSentDate === data.todayCompare) {
-      console.log("Auto report already sent today.");
-      return;
-    }
-
-    const message = buildReportMessage(data);
-    await sendTelegramMessage(CHAT_ID, message);
-
-    lastAutoSentDate = data.todayCompare;
-    console.log("Auto report sent successfully.");
-  } catch (error) {
-    console.error("Auto report error:", error.response?.data || error.message);
-  }
-}
-
-cron.schedule(
-  "0 17 * * *",
-  async () => {
-    console.log("Running 5:00 PM auto report...");
-    await sendDailyAutoReport();
-  },
-  { timezone: TIMEZONE }
-);
-
-app.post(`/webhook/${BOT_TOKEN}`, async (req, res) => {
-  try {
-    console.log("Incoming update:", JSON.stringify(req.body, null, 2));
-
-    const message = req.body?.message;
-    if (!message) return res.sendStatus(200);
-
-    const chatId = message.chat?.id;
-    const text = (message.text || "").trim();
-    const normalizedText = text.toLowerCase().split("@")[0];
-
-    if (normalizedText === "/report") {
-      const data = await getTodayFacebookData();
-      const report = buildReportMessage(data);
-      await sendTelegramMessage(chatId, report);
-      console.log("Report sent to:", chatId);
-    }
-
-    return res.sendStatus(200);
-  } catch (error) {
-    console.error("Webhook error:", error.response?.data || error.message);
-    return res.sendStatus(200);
-  }
-});
-
-app.get("/", (req, res) => {
-  res.send("Telegram Report Bot is running...");
-});
-
-app.get("/test-report", async (req, res) => {
-  try {
-    const data = await getTodayFacebookData();
-    const report = buildReportMessage(data);
-    await sendTelegramMessage(CHAT_ID, report);
-    res.send("Test report sent.");
-  } catch (error) {
-    console.error("Test report error:", error.response?.data || error.message);
-    res.status(500).send(error.response?.data || error.message);
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log("Waiting for 5:00 PM auto report and /Report command...");
-});
+    <script src="script.js"></script>
+</body>
+</html>
